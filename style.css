@@ -1,0 +1,1194 @@
+:root {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #60a5fa;
+    --secondary: #64748b;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --background: #0f172a;
+    --surface: rgba(255, 255, 255, 0.1);
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --border: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --error: #ef4444;
+    --border-radius: 8px;
+    --glass-background: rgba(255, 255, 255, 0.03);
+    --glass-dark-background: rgba(17, 25, 40, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(12px) saturate(180%);
+    --glow-primary: 0 0 20px rgba(59, 130, 246, 0.5);
+    --glow-warning: 0 0 20px rgba(245, 158, 11, 0.5);
+    --glow-danger: 0 0 20px rgba(239, 68, 68, 0.5);
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gradient-dark: linear-gradient(135deg, rgba(17, 25, 40, 0.95) 0%, rgba(17, 25, 40, 0.85) 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    transition: all 0.2s ease;
+}
+
+body {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    min-height: 100vh;
+    color: var(--text);
+    line-height: 1.5;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Login & Register Styles */
+.login-container, .register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--background) 0%, #1e293b 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-container::before, .register-container::before {
+    content: '';
+    position: fixed;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 45%);
+    animation: gradientRotate 20s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.login-container::after, .register-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(to right, var(--background) 0%, transparent 20%, transparent 80%, var(--background) 100%),
+        linear-gradient(to bottom, var(--background) 0%, transparent 20%, transparent 80%, var(--background) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.login-box, .register-box {
+    background: var(--gradient-dark);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 0 32px rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.login-box h1, .register-box h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--text);
+    font-size: 2rem;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.875rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group input[type="tel"] {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text);
+    -webkit-box-shadow: 0 0 0px 1000px var(--background) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.input-group input:not(:placeholder-shown):valid {
+    border-color: var(--success);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.input-group input:not(:placeholder-shown):invalid {
+    border-color: var(--danger);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.primary-btn, .secondary-btn {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    box-shadow: var(--glow-primary);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        var(--glow-primary),
+        0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 640px) {
+    .login-box, .register-box {
+        padding: 2rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    height: 60px;
+    background: var(--gradient-dark);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        inset 0 0 32px rgba(255, 255, 255, 0.05);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 100%;
+    position: relative;
+}
+
+/* Ajustăm logo-ul */
+.nav-content h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: white;
+}
+
+/* Centrăm butoanele de navigare */
+.nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+}
+
+.nav-btn {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    background: transparent;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-btn:hover {
+    color: white;
+}
+
+.nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-btn:hover::after,
+.nav-btn.active::after {
+    transform: scaleX(1);
+}
+
+.nav-btn.active {
+    color: white;
+}
+
+/* Ajustăm informațiile utilizatorului */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#userName {
+    display: none; /* Ascundem numele complet */
+}
+
+/* Main Content */
+.main-content {
+    margin-top: 80px;
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Punch Card */
+.punch-card {
+    background: var(--gradient-dark);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 0 32px rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 auto 2rem;
+    max-width: 800px;
+    text-align: center;
+    color: white;
+    position: relative;
+    z-index: 0;
+}
+
+.time-display {
+    font-size: 5rem;
+    font-weight: 500;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    letter-spacing: -1px;
+    margin: 1.5rem 0;
+}
+
+.punch-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* History Section */
+.history-section {
+    background: rgba(28, 28, 30, 0.8);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.history-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--text);
+}
+
+.table-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.table-header {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+}
+
+/* Stiluri pentru butonul icon */
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.icon-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.icon-btn:hover svg {
+    transform: translateY(1px);
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+    font-size: 0.9rem;
+    color: var(--text);
+    border-color: var(--border);
+}
+
+th {
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: none;
+    letter-spacing: -0.01em;
+    padding: 1rem;
+    background: transparent;
+}
+
+td {
+    vertical-align: top;
+}
+
+tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* Buttons */
+button {
+    padding: 0.875rem 1.75rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.primary-btn:hover {
+    background: var(--primary-dark);
+}
+
+.secondary-btn {
+    background: var(--secondary);
+    color: white;
+}
+
+.warning-btn {
+    background: var(--warning);
+    border-radius: 18px;
+    font-weight: 500;
+    box-shadow: none;
+}
+
+.warning-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.danger-btn {
+    background: var(--danger);
+    color: white;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#logoutBtn {
+    background: transparent;
+    color: var(--secondary);
+    padding: 0.5rem 1rem;
+}
+
+#logoutBtn:hover {
+    color: var(--text);
+}
+
+@media (max-width: 640px) {
+    .time-display {
+        font-size: 3.5rem;
+    }
+
+    .punch-buttons {
+        flex-direction: column;
+    }
+
+    .punch-card {
+        padding: 2rem 1rem;
+    }
+
+    .full-date {
+        font-size: 0.75rem;
+    }
+    
+    th, td {
+        padding: 0.75rem;
+    }
+
+    .main-punch-btn {
+        padding: 1.5rem;
+        font-size: 1.25rem;
+    }
+    
+    .warning-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Features Section */
+.features {
+    padding: 6rem 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.overline {
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(120, 113, 108, 0.1);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+}
+
+.feature-card p {
+    color: var(--secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Pricing Section */
+.pricing {
+    padding: 4rem 0;
+}
+
+.pricing h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.pricing-card {
+    background: var(--card-background);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.pricing-card.popular {
+    border: 2px solid var(--primary-color);
+}
+
+.popular-tag {
+    position: absolute;
+    top: -12px;
+    right: 2rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 1rem 0;
+}
+
+.price span {
+    font-size: 1rem;
+    color: #515154;
+}
+
+.pricing-card ul {
+    list-style: none;
+    margin: 2rem 0;
+}
+
+.pricing-card li {
+    margin-bottom: 0.8rem;
+    color: #515154;
+}
+
+.pricing-button {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 1.5rem 0;
+    color: #515154;
+}
+
+.input-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 1rem;
+}
+
+button {
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    background-color: #0071e3;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0077ed;
+}
+
+ul {
+    list-style: none;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.task-item input[type="checkbox"] {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.task-item.completed {
+    background-color: #f5f5f7;
+    text-decoration: line-through;
+    color: #86868b;
+}
+
+.timer-display {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    color: var(--secondary);
+}
+
+.warning-btn.active {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+}
+
+/* Adăugăm stiluri pentru celula cu data */
+.date-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.weekday {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.full-date {
+    font-size: 0.875rem;
+    color: var(--secondary);
+}
+
+/* Adăugăm stiluri pentru butonul principal */
+.main-punch-btn {
+    background: var(--gradient-primary);
+    box-shadow: var(--glow-primary);
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    border: none;
+}
+
+.main-punch-btn.end {
+    background: var(--danger);
+}
+
+.main-punch-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.main-punch-btn:hover::after {
+    opacity: 1;
+}
+
+.main-punch-btn.start {
+    background: var(--primary);
+}
+
+.main-punch-btn.end {
+    background: var(--danger);
+}
+
+/* Stiluri pentru butonul de pauză */
+.warning-btn {
+    width: auto;
+    min-width: 150px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    background: var(--warning);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    color: white;
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+}
+
+.warning-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.warning-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Stiluri pentru butonul când este în starea activă (Continuă Lucrul) */
+.warning-btn.active {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+}
+
+.warning-btn.active:hover {
+    box-shadow: 
+        0 0 20px rgba(34, 197, 94, 0.5),
+        0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Ajustăm secțiunea de concedii pentru un aspect mai compact */
+.leave-section {
+    background: rgba(28, 28, 30, 0.8);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* Facem formularul mai compact */
+.leave-form {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+/* Ajustăm grid-ul pentru inputuri */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Stilizăm input-urile pentru un aspect mai compact */
+.leave-form select, 
+.leave-form input[type="date"] {
+    padding: 0.625rem;
+    font-size: 0.9rem;
+    height: 40px;
+}
+
+/* Ajustăm textarea pentru motiv */
+.leave-form textarea {
+    padding: 0.625rem;
+    min-height: 80px;
+    font-size: 0.9rem;
+}
+
+/* Facem tabelul mai compact */
+.leave-history table td,
+.leave-history table th {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Ajustăm dimensiunea badge-urilor de status */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+/* Ajustăm butoanele de acțiune */
+.action-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+/* Ajustăm titlurile */
+.leave-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.leave-history h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Ajustăm spațierea pentru date range */
+.date-range {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Responsive design ajustat */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .leave-form {
+        padding: 1rem;
+    }
+}
+
+/* Îmbunătățim afișarea timpului de pauză */
+.pause-time {
+    background: rgba(255, 159, 10, 0.1);
+    border: 1px solid rgba(255, 159, 10, 0.2);
+    border-radius: 16px;
+    padding: 1rem;
+}
+
+#pauseTime {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--warning);
+}
+
+/* Adăugăm loading states pentru butoane */
+button:active {
+    transform: scale(0.98);
+}
+
+.pause-column {
+    color: var(--warning);
+    font-weight: 500;
+    font-family: 'SF Mono', monospace;
+}
+
+/* Aplicăm efecte de tranziție mai smooth */
+.punch-card,
+.history-section,
+.leave-section,
+.table-container,
+.leave-form {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Ajustăm stilurile pentru hover states */
+.punch-card:hover,
+.history-section:hover,
+.leave-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustăm spațierea conținutului principal pentru noul navbar */
+.main-content {
+    margin-top: 80px;
+}
+
+/* Stiluri pentru pagini */
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+        filter: blur(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* Stiluri pentru avatar */
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin-right: 0.5rem;
+}
+
+/* Adăugăm stiluri pentru validare */
+.input-group input:invalid {
+    border-color: var(--danger);
+}
+
+.input-group input:valid {
+    border-color: var(--success);
+}
+
+.password-strength {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+/* Stiluri pentru mesaje de eroare */
+.error-message {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.error-message.visible {
+    opacity: 1;
+}
+
+/* Îmbunătățim aspectul input-urilor */
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes gradientRotate {
+    from {
+        transform: rotate(0deg) scale(1.5);
+    }
+    to {
+        transform: rotate(360deg) scale(1.5);
+    }
+}
+
+/* Stilizare pentru select în formularul de concediu */
+.leave-form select {
+    width: 100%;
+    padding: 0.625rem;
+    font-size: 0.9rem;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text);
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1em;
+}
+
+.leave-form select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Stilizare pentru opțiunile din select */
+.leave-form select option {
+    background-color: var(--background);
+    color: var(--text);
+    padding: 0.625rem;
+}
+
+/* Hover effect pentru select */
+.leave-form select:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Stiluri pentru header-ul secțiunii de istoric */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Stiluri pentru butonul de download */
+.download-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.download-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.download-btn:hover svg {
+    transform: translateY(2px);
+} 

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimePunch - Sistem de Pontaj</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <h1>TimePunch</h1>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="Introdu email-ul">
+                </div>
+                <div class="input-group">
+                    <label for="password">Parola</label>
+                    <input type="password" id="password" required placeholder="Introdu parola">
+                </div>
+                <button type="submit" class="primary-btn">Conectare</button>
+                <button type="button" id="registerBtn" class="secondary-btn">Cont nou</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="register-container hidden" id="registerContainer">
+        <div class="register-box">
+            <h1>Înregistrare</h1>
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="registerFirstName">Prenume</label>
+                        <input type="text" id="registerFirstName" required placeholder="Prenume">
+                    </div>
+                    <div class="input-group">
+                        <label for="registerLastName">Nume</label>
+                        <input type="text" id="registerLastName" required placeholder="Nume">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required placeholder="Email">
+                </div>
+                <div class="input-group">
+                    <label for="registerPhone">Telefon</label>
+                    <input type="tel" id="registerPhone" required placeholder="Număr de telefon">
+                </div>
+                <div class="input-group">
+                    <label for="registerPassword">Parola</label>
+                    <input type="password" id="registerPassword" required placeholder="Parola">
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Confirmă Parola</label>
+                    <input type="password" id="confirmPassword" required placeholder="Confirmă parola">
+                </div>
+                <button type="submit" class="primary-btn">Înregistrare</button>
+                <button type="button" class="secondary-btn" id="backToLoginBtn">Înapoi la Conectare</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="app-container hidden" id="appContainer">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1>TimePunch</h1>
+                <div class="nav-links">
+                    <button class="nav-btn active" data-page="timesheet">Pontaj</button>
+                    <button class="nav-btn" data-page="history">Istoric</button>
+                    <button class="nav-btn" data-page="leaves">Concedii</button>
+                </div>
+                <div class="user-info">
+                    <span id="userName">...</span>
+                    <button id="logoutBtn">Deconectare</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page active" id="timesheetPage">
+                <div class="punch-card">
+                    <div class="time-display">
+                        <span id="currentTime">00:00:00</span>
+                        <div class="pause-time">
+                            <span class="pause-label">Timp pauză:</span>
+                            <span id="pauseTime">00:00:00</span>
+                        </div>
+                    </div>
+                    <div class="punch-buttons">
+                        <button id="mainPunchBtn" class="main-punch-btn start">Începe ziua de lucru</button>
+                        <button id="pauseBtn" class="warning-btn" disabled>Pauză</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="historyPage">
+                <div class="history-section">
+                    <h2>Istoric Pontări</h2>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <button id="downloadExcel" class="icon-btn" title="Descarcă Excel">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <table id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Intrare</th>
+                                    <th>Ieșire</th>
+                                    <th>Total Ore</th>
+                                    <th>Timp Pauză</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="leavesPage">
+                <div class="leave-section">
+                    <h2>Cereri Concediu</h2>
+                    <div class="leave-form">
+                        <form id="leaveRequestForm">
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="leaveType">Tip Concediu</label>
+                                    <select id="leaveType" required>
+                                        <option value="holiday">Concediu de Odihnă</option>
+                                        <option value="medical">Concediu Medical</option>
+                                        <option value="unpaid">Concediu fără Plată</option>
+                                        <option value="other">Alt tip</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="startDate">Data Început</label>
+                                    <input type="date" id="startDate" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="endDate">Data Sfârșit</label>
+                                    <input type="date" id="endDate" required>
+                                </div>
+                            </div>
+                            <div class="input-group" id="reasonGroup" style="display: none;">
+                                <label for="leaveReason">Motiv</label>
+                                <textarea id="leaveReason" rows="3" placeholder="Descrieți motivul concediului..."></textarea>
+                            </div>
+                            <button type="submit" class="primary-btn">Trimite Cererea</button>
+                        </form>
+                    </div>
+
+                    <div class="leave-history">
+                        <h3>Istoric Cereri</h3>
+                        <div class="table-container">
+                            <table id="leaveHistoryTable">
+                                <thead>
+                                    <tr>
+                                        <th>Tip</th>
+                                        <th>Perioada</th>
+                                        <th>Zile</th>
+                                        <th>Status</th>
+                                        <th>Acțiuni</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaveHistoryBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
