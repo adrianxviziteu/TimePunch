@@ -68,6 +68,7 @@
                 <div class="nav-links">
                     <button class="nav-btn active" data-page="timesheet">Pontaj</button>
                     <button class="nav-btn" data-page="history">Istoric</button>
+                    <button class="nav-btn" data-page="reports">Rapoarte</button>
                     <button class="nav-btn" data-page="leaves">Concedii</button>
                 </div>
                 <div class="user-info">
@@ -97,6 +98,22 @@
             <div class="page" id="historyPage">
                 <div class="history-section">
                     <h2>Istoric Pontări</h2>
+                    <div class="date-filter">
+                        <div class="filter-group">
+                            <label for="historyStartDate">De la:</label>
+                            <input type="date" id="historyStartDate">
+                        </div>
+                        <div class="filter-group">
+                            <label for="historyEndDate">Până la:</label>
+                            <input type="date" id="historyEndDate">
+                        </div>
+                        <button id="applyHistoryFilter" class="filter-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+                            </svg>
+                            Filtrează
+                        </button>
+                    </div>
                     <div class="table-container">
                         <div class="table-header">
                             <button id="downloadExcel" class="icon-btn" title="Descarcă Excel">
@@ -119,6 +136,46 @@
                             </thead>
                             <tbody id="historyBody"></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="reportsPage">
+                <div class="reports-section">
+                    <h2>Rapoarte și Statistici</h2>
+                    <div class="date-filter">
+                        <div class="filter-group">
+                            <label for="reportsStartDate">De la:</label>
+                            <input type="date" id="reportsStartDate">
+                        </div>
+                        <div class="filter-group">
+                            <label for="reportsEndDate">Până la:</label>
+                            <input type="date" id="reportsEndDate">
+                        </div>
+                        <button id="applyReportsFilter" class="filter-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+                            </svg>
+                            Filtrează
+                        </button>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Zile Lucrate</h3>
+                            <div class="stat-value" id="totalWorkDays">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Ore Lucrate</h3>
+                            <div class="stat-value" id="totalWorkHours">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Medie Ore/Zi</h3>
+                            <div class="stat-value" id="averageWorkHours">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Timp Pauză</h3>
+                            <div class="stat-value" id="totalPauseTime">0</div>
+                        </div>
                     </div>
                 </div>
             </div>

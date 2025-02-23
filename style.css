@@ -20,9 +20,9 @@
     --glass-dark-background: rgba(17, 25, 40, 0.85);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-blur: blur(12px) saturate(180%);
-    --glow-primary: 0 0 20px rgba(59, 130, 246, 0.5);
-    --glow-warning: 0 0 20px rgba(245, 158, 11, 0.5);
-    --glow-danger: 0 0 20px rgba(239, 68, 68, 0.5);
+    --glow-primary: 0 0 15px rgba(59, 130, 246, 0.3);
+    --glow-warning: 0 0 15px rgba(245, 158, 11, 0.3);
+    --glow-danger: 0 0 15px rgba(239, 68, 68, 0.3);
     --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     --gradient-dark: linear-gradient(135deg, rgba(17, 25, 40, 0.95) 0%, rgba(17, 25, 40, 0.85) 100%);
 }
@@ -216,7 +216,7 @@ body::before {
     transform: translateY(-2px);
     box-shadow: 
         var(--glow-primary),
-        0 8px 20px rgba(59, 130, 246, 0.3);
+        0 8px 16px rgba(59, 130, 246, 0.2);
 }
 
 .secondary-btn {
@@ -786,7 +786,13 @@ ul {
 
 .warning-btn.active {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.warning-btn.active:hover {
+    box-shadow: 
+        0 0 12px rgba(34, 197, 94, 0.3),
+        0 8px 16px rgba(34, 197, 94, 0.2);
 }
 
 /* Adăugăm stiluri pentru celula cu data */
@@ -877,13 +883,13 @@ ul {
 /* Stiluri pentru butonul când este în starea activă (Continuă Lucrul) */
 .warning-btn.active {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
 }
 
 .warning-btn.active:hover {
     box-shadow: 
-        0 0 20px rgba(34, 197, 94, 0.5),
-        0 8px 20px rgba(34, 197, 94, 0.3);
+        0 0 12px rgba(34, 197, 94, 0.3),
+        0 8px 16px rgba(34, 197, 94, 0.2);
 }
 
 /* Ajustăm secțiunea de concedii pentru un aspect mai compact */
@@ -1067,7 +1073,7 @@ button:active {
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.1);
     margin-right: 0.5rem;
 }
@@ -1191,4 +1197,156 @@ button:active {
 
 .download-btn:hover svg {
     transform: translateY(2px);
+}
+
+/* Ajustăm dimensiunile pentru formularul de înregistrare */
+.register-box {
+    max-width: 800px; /* Mărim lățimea maximă de la 500px */
+    padding: 2rem; /* Reducem padding-ul de la 3rem */
+}
+
+/* Ajustăm layout-ul pentru formularul de înregistrare */
+.register-box .form-row:first-child {
+    grid-template-columns: 1fr 1fr; /* Doar 2 coloane pentru nume și prenume */
+    grid-column: 1 / -1; /* Se întinde pe toată lățimea */
+}
+
+/* Restul câmpurilor pe 3 coloane */
+.register-box .form-row:not(:first-child) {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Ajustăm responsive design pentru formular */
+@media (max-width: 768px) {
+    .register-box .form-row:first-child,
+    .register-box .form-row:not(:first-child) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .register-box .form-row:first-child,
+    .register-box .form-row:not(:first-child) {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Stiluri pentru secțiunea de rapoarte */
+.reports-section {
+    background: var(--gradient-dark);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-top: 1rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card h3 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary);
+    font-family: 'SF Mono', monospace;
+}
+
+/* Responsive design pentru statistici */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Stiluri pentru filtrul de dată */
+.date-filter {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.filter-group input[type="date"] {
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .date-filter {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .filter-group input[type="date"] {
+        flex: 1;
+    }
 } 

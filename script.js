@@ -68,6 +68,8 @@ function switchPage(pageId) {
         loadUserHistory();
     } else if (pageId === 'leaves') {
         loadLeaveHistory();
+    } else if (pageId === 'reports') {
+        updateStatsDisplay();
     }
 }
 
@@ -605,12 +607,32 @@ mainPunchBtn.addEventListener('click', () => {
     }
 });
 
-// Modificăm funcția loadUserHistory pentru a afișa timpul de pauză
-function loadUserHistory() {
+// Funcții pentru filtrarea datelor după perioadă
+function filterDataByDateRange(data, startDate, endDate) {
+    if (!startDate && !endDate) return data;
+    
+    return data.filter(item => {
+        const itemDate = new Date(item.date);
+        const start = startDate ? new Date(startDate) : new Date(0);
+        const end = endDate ? new Date(endDate) : new Date();
+        
+        // Setăm ora la 00:00:00 pentru o comparație corectă
+        start.setHours(0, 0, 0, 0);
+        end.setHours(23, 59, 59, 999);
+        itemDate.setHours(0, 0, 0, 0);
+        
+        return itemDate >= start && itemDate <= end;
+    });
+}
+
+// Modificăm funcția loadUserHistory pentru a include filtrarea
+function loadUserHistory(startDate = null, endDate = null) {
     const userPunches = JSON.parse(localStorage.getItem(`punches_${currentUser.email}`) || '[]');
+    const filteredPunches = filterDataByDateRange(userPunches, startDate, endDate);
+    
     historyBody.innerHTML = '';
     
-    userPunches.reverse().forEach(punch => {
+    filteredPunches.reverse().forEach(punch => {
         try {
             const punchDate = new Date(punch.date);
             const startTime = new Date(punch.startTime);
@@ -744,6 +766,12 @@ leaveRequestForm.addEventListener('submit', (e) => {
         status: 'pending',
         submitDate: new Date().toISOString()
     };
+    
+    const errors = validateLeaveRequest(leaveRequest);
+    if (errors.length > 0) {
+        alert(errors.join('\n'));
+        return;
+    }
     
     saveLeavesRequest(leaveRequest);
     loadLeaveHistory();
@@ -893,4 +921,200 @@ function downloadExcel() {
 }
 
 // Adăugăm event listener pentru butonul de download
-document.getElementById('downloadExcel').addEventListener('click', downloadExcel); 
+document.getElementById('downloadExcel').addEventListener('click', downloadExcel);
+
+function generateWorkStats() {
+    const userPunches = JSON.parse(localStorage.getItem(`punches_${currentUser.email}`) || '[]');
+    
+    const stats = {
+        totalWorkDays: 0,
+        totalWorkHours: 0,
+        averageWorkHours: 0,
+        totalPauseTime: 0,
+        averagePauseTime: 0,
+        mostFrequentStartTime: '',
+        mostFrequentEndTime: ''
+    };
+    
+    // Calculăm statisticile
+    userPunches.forEach(punch => {
+        if (punch.endTime) {
+            stats.totalWorkDays++;
+            stats.totalWorkHours += punch.totalWorkTime || 0;
+            stats.totalPauseTime += punch.totalPauseTime || 0;
+        }
+    });
+    
+    stats.averageWorkHours = stats.totalWorkHours / (stats.totalWorkDays || 1);
+    stats.averagePauseTime = stats.totalPauseTime / (stats.totalWorkDays || 1);
+    
+    return stats;
+}
+
+function setupNotifications() {
+    // Verificăm dacă browserul suportă notificări
+    if (!("Notification" in window)) return;
+    
+    Notification.requestPermission();
+    
+    // Notificare pentru pauză după 4 ore de lucru
+    setInterval(() => {
+        if (isPunchedIn && !isPaused) {
+            const currentTime = new Date().getTime();
+            const workTime = currentTime - workStartTime - totalPauseTime;
+            
+            if (workTime > 4 * 60 * 60 * 1000) { // 4 ore
+                new Notification("TimePunch", {
+                    body: "Ai lucrat 4 ore. Este timpul pentru o pauză!",
+                    icon: "/icon.png"
+                });
+            }
+        }
+    }, 5 * 60 * 1000); // Verifică la fiecare 5 minute
+}
+
+function syncWithServer() {
+    const data = {
+        punches: localStorage.getItem(`punches_${currentUser.email}`),
+        leaves: localStorage.getItem(`leaves_${currentUser.email}`),
+        timerState: localStorage.getItem(`timerState_${currentUser.email}`)
+    };
+    
+    // Aici ar veni codul pentru sincronizare cu un server
+    console.log('Sincronizare cu serverul...', data);
+}
+
+function exportData(format = 'csv') {
+    const userPunches = JSON.parse(localStorage.getItem(`punches_${currentUser.email}`) || '[]');
+    
+    switch(format) {
+        case 'csv':
+            return exportToCSV(userPunches);
+        case 'pdf':
+            return exportToPDF(userPunches);
+        case 'json':
+            return exportToJSON(userPunches);
+    }
+}
+
+function exportToPDF(data) {
+    // Aici ar veni logica pentru generare PDF
+    console.log('Generare PDF...', data);
+}
+
+function autoBackup() {
+    const backupData = {
+        timestamp: new Date().getTime(),
+        punches: localStorage.getItem(`punches_${currentUser.email}`),
+        leaves: localStorage.getItem(`leaves_${currentUser.email}`),
+        settings: localStorage.getItem(`settings_${currentUser.email}`)
+    };
+    
+    localStorage.setItem(`backup_${currentUser.email}`, JSON.stringify(backupData));
+}
+
+// Rulăm backup-ul o dată pe zi
+setInterval(autoBackup, 24 * 60 * 60 * 1000);
+
+const defaultSettings = {
+    notificationsEnabled: true,
+    autoBackupEnabled: true,
+    theme: 'dark',
+    language: 'ro',
+    workHoursPerDay: 8,
+    minimumBreakTime: 30, // minute
+    maximumWorkTime: 12 // ore
+};
+
+function saveSettings(settings) {
+    localStorage.setItem(`settings_${currentUser.email}`, JSON.stringify({
+        ...defaultSettings,
+        ...settings
+    }));
+}
+
+function loadSettings() {
+    return JSON.parse(localStorage.getItem(`settings_${currentUser.email}`) || JSON.stringify(defaultSettings));
+}
+
+function validateLeaveRequest(request) {
+    const errors = [];
+    const settings = loadSettings();
+    
+    // Verificăm dacă există suprapuneri cu alte concedii
+    const existingLeaves = getLeaves();
+    const hasOverlap = existingLeaves.some(leave => {
+        const existingStart = new Date(leave.startDate);
+        const existingEnd = new Date(leave.endDate);
+        const newStart = new Date(request.startDate);
+        const newEnd = new Date(request.endDate);
+        
+        return (newStart <= existingEnd && newEnd >= existingStart);
+    });
+    
+    if (hasOverlap) {
+        errors.push('Există deja un concediu programat în această perioadă');
+    }
+    
+    // Alte validări...
+    
+    return errors;
+}
+
+// Modificăm funcția updateStatsDisplay pentru a include filtrarea
+function updateStatsDisplay(startDate = null, endDate = null) {
+    const userPunches = JSON.parse(localStorage.getItem(`punches_${currentUser.email}`) || '[]');
+    const filteredPunches = filterDataByDateRange(userPunches, startDate, endDate);
+    
+    const stats = {
+        totalWorkDays: 0,
+        totalWorkHours: 0,
+        totalPauseTime: 0
+    };
+    
+    filteredPunches.forEach(punch => {
+        if (punch.endTime) {
+            stats.totalWorkDays++;
+            stats.totalWorkHours += punch.totalWorkTime || 0;
+            stats.totalPauseTime += punch.totalPauseTime || 0;
+        }
+    });
+    
+    stats.averageWorkHours = stats.totalWorkDays > 0 ? 
+        stats.totalWorkHours / stats.totalWorkDays : 0;
+    
+    document.getElementById('totalWorkDays').textContent = stats.totalWorkDays;
+    document.getElementById('totalWorkHours').textContent = formatTimer(stats.totalWorkHours);
+    document.getElementById('averageWorkHours').textContent = formatTimer(stats.averageWorkHours);
+    document.getElementById('totalPauseTime').textContent = formatTimer(stats.totalPauseTime);
+}
+
+// Adăugăm event listeners pentru filtre
+document.getElementById('applyHistoryFilter').addEventListener('click', () => {
+    const startDate = document.getElementById('historyStartDate').value;
+    const endDate = document.getElementById('historyEndDate').value;
+    loadUserHistory(startDate, endDate);
+});
+
+document.getElementById('applyReportsFilter').addEventListener('click', () => {
+    const startDate = document.getElementById('reportsStartDate').value;
+    const endDate = document.getElementById('reportsEndDate').value;
+    updateStatsDisplay(startDate, endDate);
+});
+
+// Inițializăm datele cu luna curentă
+function setCurrentMonthDates() {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    
+    const formatDate = date => date.toISOString().split('T')[0];
+    
+    ['history', 'reports'].forEach(section => {
+        document.getElementById(`${section}StartDate`).value = formatDate(firstDay);
+        document.getElementById(`${section}EndDate`).value = formatDate(lastDay);
+    });
+}
+
+// Apelăm funcția la încărcarea paginii
+setCurrentMonthDates(); 
